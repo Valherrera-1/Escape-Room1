@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-amber-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Ruta de la Libertad: Emancipación de Latinoamérica</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700&family=Fauna+One&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#f4e4bc',
+                        parchmentDark: '#e2cc97',
+                        ink: '#2b1e16',
+                        patriotRed: '#991b1b',
+                        patriotGold: '#d97706',
+                        patriotBlue: '#1e3a8a',
+                        patriotGreen: '#14532d'
+                    },
+                    fontFamily: {
+                        header: ['Cinzel', 'serif'],
+                        decorative: ['Cinzel Decorative', 'cursive'],
+                        body: ['Fauna One', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .parchment-bg {
+            background-color: #f4e4bc;
+            background-image: radial-gradient(#d4c090 1.2px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .parchment-card {
+            background: linear-gradient(135deg, #fbf4df 0%, #edd8a5 100%);
+            border: 2px solid #b89855;
+            box-shadow: 0 10px 25px -5px rgba(43, 30, 22, 0.35), inset 0 0 40px rgba(184, 152, 85, 0.25);
+        }
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2cc97;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #855b28;
+            border-radius: 4px;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(217, 119, 6, 0.8)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 18px rgba(217, 119, 6, 1)); transform: scale(1.05); }
+        }
+        .active-station {
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+        /* CSS Caesar Cipher Wheel Animation Support */
+        .cipher-ring {
+            transition: transform 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="h-full text-ink font-body parchment-bg select-none overflow-x-hidden flex flex-col min-h-screen">
+
+    <!-- SoundFX Engine (Web Audio API - No external files required) -->
+    <script>
+        class SoundFX {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playSuccess() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, i) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.1);
+                    gain.gain.setValueAtTime(0.12, now + i * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.3);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + i * 0.1);
+                    osc.stop(now + i * 0.1 + 0.35);
+                });
+            }
+            playError() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.25);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+            playClick() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(220, now + 0.05);
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+            playVictoryFanfare() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const notes = [
+                    {f: 523.25, d: 0.25}, {f: 659.25, d: 0.25}, {f: 783.99, d: 0.25},
+                    {f: 1046.50, d: 0.5}, {f: 880.00, d: 0.25}, {f: 1046.50, d: 0.75}
+                ];
+                let time = now;
+                notes.forEach((n) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(n.f, time);
+                    gain.gain.setValueAtTime(0.15, time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + n.d);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(time);
+                    osc.stop(time + n.d);
+                    time += n.d;
+                });
+            }
+        }
+        const sound = new SoundFX();
+    </script>
+
+    <!-- Top Navigation / Progress Dashboard -->
+    <header class="bg-amber-950 text-amber-100 shadow-xl border-b-4 border-patriotGold sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <i data-lucide="compass" class="w-8 h-8 text-patriotGold animate-spin-slow"></i>
+                <div>
+                    <h1 class="font-decorative text-lg md:text-xl font-bold tracking-wider text-amber-200">LA RUTA DE LA LIBERTAD</h1>
+                    <p class="text-xs text-amber-400 font-header tracking-widest uppercase">Expedición de la Independencia (1808 - 1826)</p>
+                </div>
+            </div>
+
+            <!-- Global Progress Bar & Medals -->
+            <div class="flex items-center gap-4 bg-amber-900/60 px-4 py-2 rounded-xl border border-amber-700/50">
+                <div class="flex flex-col items-end">
+                    <span class="text-xs font-header text-amber-300">Liberación Continental</span>
+                    <span id="progress-text" class="text-sm font-bold text-amber-100">0% Completado</span>
+                </div>
+                <div class="w-32 md:w-44 bg-amber-950 rounded-full h-3.5 border border-amber-700 overflow-hidden p-0.5">
+                    <div id="progress-bar" class="bg-gradient-to-r from-amber-500 via-patriotGold to-green-500 h-full rounded-full transition-all duration-700 w-0"></div>
+                </div>
+                <button onclick="app.toggleLogrosModal()" class="flex items-center gap-1.5 bg-patriotGold/20 hover:bg-patriotGold/40 text-amber-200 px-3 py-1.5 rounded-lg border border-patriotGold/50 transition">
+                    <i data-lucide="award" class="w-5 h-5 text-patriotGold"></i>
+                    <span id="medals-count" class="text-xs font-bold">0/5 Medallas</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Expedition Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
+
+        <!-- Intro Mission Briefing -->
+        <section id="intro-card" class="parchment-card rounded-2xl p-6 relative overflow-hidden">
+            <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+                <i data-lucide="scroll" class="w-64 h-64 text-amber-900"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="inline-block bg-patriotRed text-white text-xs px-3 py-1 rounded-full font-header font-bold tracking-widest mb-2 uppercase">Misión Patriota</div>
+                <h2 class="font-header text-2xl md:text-3xl text-amber-950 font-bold mb-2">Desentraña las Pistas de la Independencia</h2>
+                <p class="text-amber-900 text-sm md:text-base max-w-4xl leading-relaxed">
+                    Estimado expedicionario: El continente americano se encuentra bajo el yugo colonial. Tu misión pedagógica es recorrer **5 territorios clave de emancipación**, descifrar cartas encriptadas de libertadores, tomar decisiones estratégicas de batalla y recuperar las pistas de la soberanía. ¡Supera cada enigma para proclamar la libertad!
+                </p>
+            </div>
+        </section>
+
+        <!-- Expedition Map / Territory Stations -->
+        <section class="parchment-card rounded-2xl p-4 md:p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between mb-4 border-b border-amber-800/20 pb-3">
+                <h3 class="font-header text-lg md:text-xl text-amber-950 font-bold flex items-center gap-2">
+                    <i data-lucide="map-pin" class="text-patriotRed"></i>
+                    Mapa de Territorios e hitos Libertadores
+                </h3>
+                <span class="text-xs bg-amber-900/10 text-amber-900 px-3 py-1 rounded-full border border-amber-900/20 font-semibold">
+                    Haz clic en una estación disponible para ingresar
+                </span>
+            </div>
+
+            <!-- Visual Node Map Grid -->
+            <div class="relative w-full rounded-xl bg-amber-900/10 border-2 border-amber-800/30 p-6 md:p-10 overflow-hidden min-h-[380px] flex items-center justify-center">
+                
+                <!-- Connector Path Decorative SVG -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none stroke-amber-800/40 stroke-2" style="stroke-dasharray: 6 6;">
+                    <path d="M 100,190 Q 250,70 400,190 T 700,100 T 900,240 T 1100,190" fill="none" class="hidden lg:block"/>
+                </svg>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 w-full z-10">
+                    <!-- Station 1 Node -->
+                    <div onclick="app.openStation(1)" id="map-node-1" class="cursor-pointer group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/80 border-2 border-amber-700 hover:scale-105 active-station shadow-lg">
+                        <div class="w-16 h-16 rounded-full bg-amber-900 text-amber-100 flex items-center justify-center font-header text-xl font-bold shadow-md group-hover:bg-patriotRed transition relative mb-3">
+                            <span>1</span>
+                            <div id="node-check-1" class="hidden absolute -top-1 -right-1 bg-green-600 text-white rounded-full p-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-header font-bold text-sm text-amber-950 mb-1">Crisis Imperial</h4>
+                        <p class="text-xs text-amber-800 line-clamp-2">Madrid / Caracas (1808)</p>
+                        <span id="node-badge-1" class="mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-800 text-amber-100 px-2.5 py-0.5 rounded-full">Disponible</span>
+                    </div>
+
+                    <!-- Station 2 Node -->
+                    <div onclick="app.openStation(2)" id="map-node-2" class="opacity-60 cursor-not-allowed group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/50 border-2 border-amber-400">
+                        <div class="w-16 h-16 rounded-full bg-amber-800/60 text-amber-200 flex items-center justify-center font-header text-xl font-bold shadow-md transition relative mb-3">
+                            <i data-lucide="lock" class="w-6 h-6" id="node-icon-2"></i>
+                            <div id="node-check-2" class="hidden absolute -top-1 -right-1 bg-green-600 text-white rounded-full p-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-header font-bold text-sm text-amber-950 mb-1">Eco Mestizo e Indígena</h4>
+                        <p class="text-xs text-amber-800 line-clamp-2">México / Dolores (1810)</p>
+                        <span id="node-badge-2" class="mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-700/40 text-amber-900 px-2.5 py-0.5 rounded-full">Bloqueado</span>
+                    </div>
+
+                    <!-- Station 3 Node -->
+                    <div onclick="app.openStation(3)" id="map-node-3" class="opacity-60 cursor-not-allowed group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/50 border-2 border-amber-400">
+                        <div class="w-16 h-16 rounded-full bg-amber-800/60 text-amber-200 flex items-center justify-center font-header text-xl font-bold shadow-md transition relative mb-3">
+                            <i data-lucide="lock" class="w-6 h-6" id="node-icon-3"></i>
+                            <div id="node-check-3" class="hidden absolute -top-1 -right-1 bg-green-600 text-white rounded-full p-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-header font-bold text-sm text-amber-950 mb-1">Gesta del Sur</h4>
+                        <p class="text-xs text-amber-800 line-clamp-2">Río de la Plata / Chile (1816-1818)</p>
+                        <span id="node-badge-3" class="mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-700/40 text-amber-900 px-2.5 py-0.5 rounded-full">Bloqueado</span>
+                    </div>
+
+                    <!-- Station 4 Node -->
+                    <div onclick="app.openStation(4)" id="map-node-4" class="opacity-60 cursor-not-allowed group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/50 border-2 border-amber-400">
+                        <div class="w-16 h-16 rounded-full bg-amber-800/60 text-amber-200 flex items-center justify-center font-header text-xl font-bold shadow-md transition relative mb-3">
+                            <i data-lucide="lock" class="w-6 h-6" id="node-icon-4"></i>
+                            <div id="node-check-4" class="hidden absolute -top-1 -right-1 bg-green-600 text-white rounded-full p-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-header font-bold text-sm text-amber-950 mb-1">Sueño Bolivariano</h4>
+                        <p class="text-xs text-amber-800 line-clamp-2">Gran Colombia (1819-1821)</p>
+                        <span id="node-badge-4" class="mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-700/40 text-amber-900 px-2.5 py-0.5 rounded-full">Bloqueado</span>
+                    </div>
+
+                    <!-- Station 5 Node -->
+                    <div onclick="app.openStation(5)" id="map-node-5" class="opacity-60 cursor-not-allowed group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/50 border-2 border-amber-400">
+                        <div class="w-16 h-16 rounded-full bg-amber-800/60 text-amber-200 flex items-center justify-center font-header text-xl font-bold shadow-md transition relative mb-3">
+                            <i data-lucide="lock" class="w-6 h-6" id="node-icon-5"></i>
+                            <div id="node-check-5" class="hidden absolute -top-1 -right-1 bg-green-600 text-white rounded-full p-1 shadow">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <h4 class="font-header font-bold text-sm text-amber-950 mb-1">El Sello Final</h4>
+                        <p class="text-xs text-amber-800 line-clamp-2">Perú / Ayacucho (1824)</p>
+                        <span id="node-badge-5" class="mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-700/40 text-amber-900 px-2.5 py-0.5 rounded-full">Bloqueado</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Unlocked Clues Journal -->
+        <section class="parchment-card rounded-2xl p-6 border-t-4 border-t-patriotGold">
+            <h3 class="font-header text-lg font-bold text-amber-950 mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="text-patriotGold"></i>
+                Diario de Pistas e Hallazgos Históricos (<span id="clues-found-count">0</span>/5)
+            </h3>
+            <div id="clues-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-amber-950/5 border border-dashed border-amber-800/30 p-4 rounded-xl flex items-center justify-center text-xs text-amber-800/60 italic text-center min-h-[100px]">
+                    Supera la Estación 1 para obtener la primera pista codificada...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Interactive Station Room -->
+    <div id="station-modal" class="fixed inset-0 bg-amber-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 md:p-6 overflow-y-auto">
+        <div class="parchment-card max-w-3xl w-full rounded-2xl border-4 border-amber-800 shadow-2xl overflow-hidden my-auto flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="bg-amber-950 text-amber-100 p-4 md:p-5 flex justify-between items-center border-b-2 border-patriotGold">
+                <div class="flex items-center gap-3">
+                    <span id="modal-station-number" class="w-8 h-8 rounded-full bg-patriotGold text-amber-950 font-header font-bold flex items-center justify-center text-sm">1</span>
+                    <div>
+                        <h3 id="modal-station-title" class="font-header text-lg md:text-xl font-bold text-amber-200">Título de la Estación</h3>
+                        <p id="modal-station-subtitle" class="text-xs text-amber-400">Subtítulo histórico</p>
+                    </div>
+                </div>
+                <button onclick="app.closeStationModal()" class="text-amber-400 hover:text-white p-2 rounded-lg hover:bg-amber-900 transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-5 md:p-8 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                <!-- Context Box -->
+                <div class="bg-amber-900/10 border-l-4 border-patriotRed p-4 rounded-r-xl">
+                    <h4 class="font-header text-sm font-bold text-patriotRed uppercase tracking-wider mb-1 flex items-center gap-2">
+                        <i data-lucide="scroll" class="w-4 h-4"></i> Contexto Histórico Relevante
+                    </h4>
+                    <p id="modal-station-context" class="text-sm text-amber-950 leading-relaxed">
+                        Texto de contexto...
+                    </p>
+                </div>
+
+                <!-- Interactive Challenge Section -->
+                <div class="bg-amber-100/90 rounded-xl p-5 border border-amber-300 shadow-inner space-y-4">
+                    <div class="flex items-center justify-between border-b border-amber-300 pb-2">
+                        <h4 class="font-header font-bold text-amber-950 text-base flex items-center gap-2">
+                            <i data-lucide="key-round" class="text-patriotGold"></i>
+                            El Enigma de la Estación
+                        </h4>
+                        <span class="text-xs bg-patriotGold/20 text-amber-900 px-2.5 py-1 rounded-md font-semibold">Desafío Pedagógico</span>
+                    </div>
+
+                    <p id="modal-challenge-desc" class="text-sm text-amber-900 font-semibold">Instrucciones del desafío...</p>
+
+                    <!-- Dynamic Enigma Container -->
+                    <div id="modal-enigma-container" class="pt-2">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Feedback Message -->
+                <div id="modal-feedback" class="hidden p-4 rounded-xl text-sm font-semibold flex items-start gap-3">
+                    <!-- Dynamic Feedback Content -->
+                </div>
+            </div>
+
+            <!-- Modal Action Bar -->
+            <div class="bg-amber-200/80 p-4 border-t border-amber-400/60 flex justify-between items-center gap-3">
+                <button onclick="app.closeStationModal()" class="px-4 py-2 rounded-xl text-amber-900 font-header font-bold hover:bg-amber-300 transition text-sm">
+                    Regresar al Mapa
+                </button>
+                <button id="modal-action-btn" onclick="app.verifyCurrentStation()" class="bg-patriotGold hover:bg-amber-600 text-amber-950 font-header font-extrabold px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                    <span>Verificar Enigma</span>
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medals/Achievements Modal -->
+    <div id="logros-modal" class="fixed inset-0 bg-amber-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="parchment-card max-w-lg w-full rounded-2xl border-4 border-patriotGold shadow-2xl p-6 space-y-6">
+            <div class="flex justify-between items-center border-b border-amber-800/20 pb-3">
+                <h3 class="font-header text-xl font-bold text-amber-950 flex items-center gap-2">
+                    <i data-lucide="award" class="text-patriotGold"></i>
+                    Medallero de la Independencia
+                </h3>
+                <button onclick="app.toggleLogrosModal()" class="text-amber-900 hover:text-amber-700">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="logros-list" class="space-y-3">
+                <!-- Logros renders dynamically -->
+            </div>
+
+            <button onclick="app.toggleLogrosModal()" class="w-full bg-amber-950 text-amber-100 font-header font-bold py-2.5 rounded-xl hover:bg-amber-900 transition text-sm">
+                Cerrar Medallero
+            </button>
+        </div>
+    </div>
+
+    <!-- Victory Diploma Modal -->
+    <div id="victory-modal" class="fixed inset-0 bg-amber-950/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="parchment-card max-w-2xl w-full rounded-2xl border-4 border-patriotGold shadow-2xl p-6 md:p-8 text-center space-y-6 my-auto">
+            <div class="inline-block p-4 rounded-full bg-patriotGold/20 border-2 border-patriotGold mb-2">
+                <i data-lucide="crown" class="w-16 h-16 text-patriotGold animate-bounce"></i>
+            </div>
+            
+            <h2 class="font-decorative text-2xl md:text-3xl text-amber-950 font-bold">¡DIPLOMA DE LIBERTADOR DE LAS AMÉRICAS!</h2>
+            <p class="text-xs tracking-widest text-patriotRed font-bold font-header uppercase">Proclama de Soberanía e Integración Continental</p>
+
+            <div class="bg-amber-100/90 p-5 rounded-xl border border-amber-300 text-left space-y-3 shadow-inner">
+                <p class="text-sm text-amber-950 leading-relaxed">
+                    Por cuanto el expedicionario ha superado con éxito la ruta histórica entre 1808 y 1826, descifrando los mensajes secretos, organizando las campañas militares y comprendiendo las ideas republicanas de emancipación.
+                </p>
+                <div class="border-t border-amber-300 pt-3 flex justify-between text-xs font-bold text-amber-900">
+                    <span>Territorios Liberados: 5/5</span>
+                    <span>Medallas Otorgadas: 5/5</span>
+                    <span>Nivel: Gran Historiador</span>
+                </div>
+            </div>
+
+            <div class="text-left space-y-2">
+                <h4 class="font-header font-bold text-sm text-amber-950">Grandes Lecciones de la Emancipación:</h4>
+                <ul class="text-xs text-amber-900 space-y-1 list-disc pl-5">
+                    <li><strong>1808 (Crisis):</strong> El vacío de poder por la invasión de Napoleón originó las Juntas Autónomas.</li>
+                    <li><strong>1810 (Pueblo):</strong> Indígenas, mestizos y criollos iniciaron levantamientos populares masivos.</li>
+                    <li><strong>1817 (Estrategia):</strong> San Martín demostró audacia logística en el Cruce de los Andes.</li>
+                    <li><strong>1819 (Unión):</strong> Bolívar unificó esfuerzos continentales en la Gran Colombia.</li>
+                    <li><strong>1824 (Consolidación):</strong> La Batalla de Ayacucho selló definitivamente el fin del imperio español.</li>
+                </ul>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="window.print()" class="flex-1 bg-amber-900 hover:bg-amber-800 text-amber-100 font-header font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    Imprimir / Guardar Diploma
+                </button>
+                <button onclick="location.reload()" class="flex-1 bg-patriotGold hover:bg-amber-600 text-amber-950 font-header font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    Reiniciar Expedición
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // Expanded 5 Historical Stations Data
+        const STATIONS_DATA = [
+            {
+                id: 1,
+                title: "1. La Crisis del Imperio",
+                subtitle: "Madrid y Caracas (1808) — El Vacío de Poder",
+                context: "En 1808, Napoleón Bonaparte invadió España y obligó al rey Fernando VII a abdicar en favor de su hermano José Bonaparte. Ante la ausencia de un monarca legítimo, las colonias en América aplicaron el principio legal de 'Vacatio Regis': si el rey cae, la soberanía retorna al pueblo. Esto motivó la creación de las primeras Juntas Autónomas de Gobierno.",
+                challengeDesc: "Descifra la carta encriptada mediante la Rueda Caesar (Desplazamiento +3 en el alfabeto A-Z). Selecciona la palabra desencadenante correcta:",
+                type: "caesar",
+                cipherText: "M D   V R E E U D Q L D   V E   D V X P H",
+                targetWord: "SOBERANIA",
+                options: ["SOBERANIA", "MONARQUIA", "RECONQUISTA", "LEALTAD"],
+                clue: "Pista #1 (1808): La invasión napoleónica rompió la autoridad del rey español, devolviendo la soberanía a los cabildos americanos.",
+                medal: "Medalla del Vacío Imperial",
+                medalDesc: "Descifraste la causa inicial de las Juntas de Gobierno de 1808."
+            },
+            {
+                id: 2,
+                title: "2. El Eco Mestizo e Indígena",
+                subtitle: "México (1810) — El Grito de Dolores de Hidalgo y Morelos",
+                context: "A diferencia del sur donde primaron los criollos adinerados, en Nueva España (México) el cura Miguel Hidalgo y el líder José María Morelos encabezaron una insurrección masiva de campesinos, indígenas y mestizos. Exigían la abolición de la esclavitud, la restitución de tierras comunitarias y el fin de los tributos coloniales.",
+                challengeDesc: "Ordena cronológicamente la secuencia de la insurrección en Nueva España:",
+                type: "order",
+                items: [
+                    { id: "step-1", label: "El Grito de Dolores (1810): Miguel Hidalgo convoca al pueblo con el estandarte de la Virgen de Guadalupe." },
+                    { id: "step-2", label: "Redacción de 'Sentimientos de la Nación' (1813) por José María Morelos declarando la abolición de la esclavitud." },
+                    { id: "step-3", label: "Resistencia en guerrillas populares lideradas por Vicente Guerrero frente a la reconquista realista." },
+                    { id: "step-4", label: "Abrazo de Acatempan y Firma del Plan de Iguala (1821) que unificó a insurgentes y realistas." }
+                ],
+                correctOrder: ["step-1", "step-2", "step-3", "step-4"],
+                clue: "Pista #2 (1810): El movimiento mexicano fue único por su carácter social masivo e inclusión de las demandas indígenas y populares.",
+                medal: "Estandarte de Dolores",
+                medalDesc: "Comprendiste la dimensión social y mestiza del proceso independentista."
+            },
+            {
+                id: 3,
+                title: "3. La Gesta del Sur",
+                subtitle: "Río de la Plata y Chile (1816-1818) — San Martín y los Andes",
+                context: "Tras declarar la independencia en el Congreso de Tucumán (1816), las Provincias Unidas enfrentaron una dura amenaza. El general José de San Martín comprendió que para asegurar la libertad no bastaba con defender Buenos Aires: era necesario cruzar la cordillera de los Andes, liberar Chile y atacar el centro del poder español en el Perú por mar.",
+                challengeDesc: "Toma de Decisión Estratégica: ¿Cuál era la mejor ruta logística para garantizar la victoria en Chacabuco y Maipú?",
+                type: "decision",
+                options: [
+                    {
+                        text: "Dividir el Ejército de los Andes en seis columnas por distintos pasos cordilleranos para desorientar al enemigo español.",
+                        correct: true,
+                        explanation: "¡Estrategia militar perfecta! La 'guerra de zapa' desorientó al ejército realista y permitió concentrar las tropas libertadoras eficazmente en Chile."
+                    },
+                    {
+                        text: "Atacar frontalmente atravesando el Alto Perú (Bolivia) en una sola línea terrestre pesada por la montaña.",
+                        correct: false,
+                        explanation: "Ruta fallida. Las expediciones anteriores por el Alto Perú fracasaron debido al terreno rocoso y las fortificaciones realistas."
+                    },
+                    {
+                        text: "Esperar en Buenos Aires a que la corona española firme una tregua diplomática voluntaria.",
+                        correct: false,
+                        explanation: "Error político. La corona bajo Fernando VII envió tropas de reconquista severas en lugar de negociar."
+                    }
+                ],
+                clue: "Pista #3 (1817): El Cruce de los Andes por San Martín demostró que la emancipación exigía una visión militar y estratégica continental.",
+                medal: "Medalla de los Andes",
+                medalDesc: "Ejecutaste con éxito la audaz estrategia militar de San Martín."
+            },
+            {
+                id: 4,
+                title: "4. El Sueño Bolivariano",
+                subtitle: "Gran Colombia (1819-1821) — Bolívar, Boyacá y Carabobo",
+                context: "Simón Bolívar defendió la tesis de que los países hispanoamericanos debían unirse en una sola gran nación poderosa para defenderse del imperialismo. En el Congreso de Angostura (1819) proclamó la Gran Colombia y emprendió la hazaña de cruzar el páramo de Pisba, logrando la victoria decisiva en Boyacá (1819) y Carabobo (1821).",
+                challengeDesc: "Asocia cada documento histórico bolivariano con su propósito político clave:",
+                type: "match",
+                pairs: [
+                    { id: "p1", leader: "Carta de Jamaica (1815)", event: "Diagnóstico del futuro de América y llamado a la unión continental." },
+                    { id: "p2", leader: "Congreso de Angostura (1819)", event: "Creación legal de la Gran Colombia (Venezuela, Colombia, Ecuador)." },
+                    { id: "p3", leader: "Batalla de Boyacá (1819)", event: "Liberación de la Nueva Granada y toma del Virreinato de Santa Fe." }
+                ],
+                clue: "Pista #4 (1819): El proyecto bolivariano buscó la integración política de la Nueva Granada y Venezuela en la Gran Colombia.",
+                medal: "Sombra del Libertador",
+                medalDesc: "Dominaste los documentos e hitos fundamentales del proyecto bolivariano."
+            },
+            {
+                id: 5,
+                title: "5. El Sello Final",
+                subtitle: "Perú y Ayacucho (1824) — Sucre y la Independencia Total",
+                context: "A pesar de las independencias locales, el Virreinato del Perú continuaba siendo el bastión militar español más poderoso. La alianza entre los ejércitos del Norte (Bolívar) y del Sur culminó el 9 de diciembre de 1824 en la Pampa de la Quinua, donde el Mariscal Antonio José de Sucre dirigió la Batalla de Ayacucho, firmándose la Capitulación definitiva.",
+                challengeDesc: "Responde al enigma conceptual para consolidar la soberanía del continente:",
+                type: "quiz",
+                question: "¿Qué consecuencia directa tuvo la Capitulación de Ayacucho en 1824?",
+                answers: [
+                    "La rendición definitiva del ejército realista y el fin formal de la dominación española en Sudamérica.",
+                    "La reanexión inmediata de las colonias a la corona francesa.",
+                    "El inicio de la firma de tratados de libre comercio obligatorios con Napoleón.",
+                    "La disolución de los ejércitos patriotas y retorno al sistema virreinal."
+                ],
+                correctIndex: 0,
+                clue: "Pista #5 (1824): Ayacucho constituyó el sello de la independencia continental y la consolidación de las repúblicas latinoamericanas.",
+                medal: "Gran Sol de Ayacucho",
+                medalDesc: "Alcanzaste el sello final de la emancipación de Latinoamérica."
+            }
+        ];
+
+        class IndependenceApp {
+            constructor() {
+                this.completedStations = new Set();
+                this.unlockedStations = new Set([1]);
+                this.currentStationId = null;
+                this.userOrderState = [];
+                this.cipherOffset = 3;
+            }
+
+            init() {
+                this.renderMapState();
+                this.renderClues();
+                this.renderLogros();
+                lucide.createIcons();
+            }
+
+            renderMapState() {
+                STATIONS_DATA.forEach(st => {
+                    const node = document.getElementById(`map-node-${st.id}`);
+                    const icon = document.getElementById(`node-icon-${st.id}`);
+                    const badge = document.getElementById(`node-badge-${st.id}`);
+                    const check = document.getElementById(`node-check-${st.id}`);
+
+                    if (this.completedStations.has(st.id)) {
+                        node.className = "cursor-pointer group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-green-100/90 border-2 border-green-700 hover:scale-105 shadow-md";
+                        if (badge) {
+                            badge.className = "mt-3 text-[10px] font-bold tracking-widest uppercase bg-green-800 text-green-100 px-2.5 py-0.5 rounded-full";
+                            badge.textContent = "Liberado";
+                        }
+                        if (check) check.classList.remove('hidden');
+                        if (icon) icon.setAttribute('data-lucide', 'check');
+                    } else if (this.unlockedStations.has(st.id)) {
+                        node.className = "cursor-pointer group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/90 border-2 border-amber-700 hover:scale-105 active-station shadow-lg";
+                        if (badge) {
+                            badge.className = "mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-800 text-amber-100 px-2.5 py-0.5 rounded-full";
+                            badge.textContent = "Disponible";
+                        }
+                        if (check) check.classList.add('hidden');
+                        if (icon) icon.setAttribute('data-lucide', 'unlock');
+                    } else {
+                        node.className = "opacity-50 cursor-not-allowed group flex flex-col items-center text-center p-4 rounded-xl transition-all duration-300 bg-amber-100/40 border-2 border-amber-400";
+                        if (badge) {
+                            badge.className = "mt-3 text-[10px] font-bold tracking-widest uppercase bg-amber-800/40 text-amber-950 px-2.5 py-0.5 rounded-full";
+                            badge.textContent = "Bloqueado";
+                        }
+                        if (check) check.classList.add('hidden');
+                        if (icon) icon.setAttribute('data-lucide', 'lock');
+                    }
+                });
+
+                const percent = Math.round((this.completedStations.size / 5) * 100);
+                document.getElementById('progress-bar').style.width = `${percent}%`;
+                document.getElementById('progress-text').textContent = `${percent}% Completado`;
+                document.getElementById('medals-count').textContent = `${this.completedStations.size}/5 Medallas`;
+                document.getElementById('clues-found-count').textContent = `${this.completedStations.size}`;
+
+                lucide.createIcons();
+            }
+
+            openStation(id) {
+                sound.playClick();
+                if (!this.unlockedStations.has(id)) return;
+
+                this.currentStationId = id;
+                const station = STATIONS_DATA.find(s => s.id === id);
+
+                document.getElementById('modal-station-number').textContent = station.id;
+                document.getElementById('modal-station-title').textContent = station.title;
+                document.getElementById('modal-station-subtitle').textContent = station.subtitle;
+                document.getElementById('modal-station-context').textContent = station.context;
+                document.getElementById('modal-challenge-desc').textContent = station.challengeDesc;
+
+                const feedbackEl = document.getElementById('modal-feedback');
+                feedbackEl.className = "hidden p-4 rounded-xl text-sm font-semibold flex items-start gap-3";
+                feedbackEl.innerHTML = "";
+
+                const container = document.getElementById('modal-enigma-container');
+                container.innerHTML = "";
+
+                if (station.type === 'caesar') {
+                    this.renderCaesarChallenge(container, station);
+                } else if (station.type === 'order') {
+                    this.renderOrderChallenge(container, station);
+                } else if (station.type === 'decision') {
+                    this.renderDecisionChallenge(container, station);
+                } else if (station.type === 'match') {
+                    this.renderMatchChallenge(container, station);
+                } else if (station.type === 'quiz') {
+                    this.renderQuizChallenge(container, station);
+                }
+
+                document.getElementById('station-modal').classList.remove('hidden');
+                lucide.createIcons();
+            }
+
+            closeStationModal() {
+                sound.playClick();
+                document.getElementById('station-modal').classList.add('hidden');
+            }
+
+            // Station Specific Renderers
+            renderCaesarChallenge(container, station) {
+                const box = document.createElement('div');
+                box.className = "space-y-4 text-center";
+                
+                box.innerHTML = `
+                    <div class="p-4 bg-amber-950 text-amber-200 rounded-xl font-mono text-base md:text-lg tracking-widest border border-patriotGold shadow-inner">
+                        <span class="text-xs text-amber-400 block font-header mb-1">CÓDIGO CIFRADO ENCONTRADO EN CARACAS:</span>
+                        "${station.cipherText}"
+                    </div>
+
+                    <div class="p-3 bg-amber-200/50 rounded-xl border border-amber-300">
+                        <label class="block text-xs font-bold text-amber-950 mb-2">Selecciona la palabra descifrada que completa la proclama:</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${station.options.map(opt => `
+                                <button onclick="app.selectCaesarOption('${opt}')" id="caesar-btn-${opt}" class="caesar-opt-btn p-2.5 bg-white border border-amber-400 rounded-lg text-xs md:text-sm font-bold text-amber-950 hover:bg-amber-300 transition">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(box);
+                this.selectedCaesarOption = null;
+            }
+
+            selectCaesarOption(word) {
+                sound.playClick();
+                this.selectedCaesarOption = word;
+                document.querySelectorAll('.caesar-opt-btn').forEach(btn => {
+                    btn.classList.remove('bg-patriotGold', 'text-amber-950', 'ring-2', 'ring-amber-800');
+                    btn.classList.add('bg-white');
+                });
+                const selectedBtn = document.getElementById(`caesar-btn-${word}`);
+                if (selectedBtn) {
+                    selectedBtn.classList.remove('bg-white');
+                    selectedBtn.classList.add('bg-patriotGold', 'text-amber-950', 'ring-2', 'ring-amber-800');
+                }
+            }
+
+            renderOrderChallenge(container, station) {
+                this.userOrderState = [...station.items].sort(() => Math.random() - 0.5);
+                const list = document.createElement('div');
+                list.className = "space-y-2";
+                list.id = "sortable-list";
+                container.appendChild(list);
+                this.renderOrderItems(list);
+            }
+
+            renderOrderItems(container) {
+                container.innerHTML = "";
+                this.userOrderState.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between p-3 bg-white/80 rounded-xl border border-amber-300 shadow-sm gap-3";
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-amber-900 text-amber-100 text-xs font-bold flex items-center justify-center flex-shrink-0">${index + 1}</span>
+                            <span class="text-xs md:text-sm text-amber-950">${item.label}</span>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="app.moveOrderItem(${index}, -1)" class="p-1 hover:bg-amber-200 rounded text-amber-900 ${index === 0 ? 'opacity-30 pointer-events-none' : ''}">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="app.moveOrderItem(${index}, 1)" class="p-1 hover:bg-amber-200 rounded text-amber-900 ${index === this.userOrderState.length - 1 ? 'opacity-30 pointer-events-none' : ''}">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                lucide.createIcons();
+            }
+
+            moveOrderItem(index, direction) {
+                sound.playClick();
+                const target = index + direction;
+                if (target < 0 || target >= this.userOrderState.length) return;
+                const temp = this.userOrderState[index];
+                this.userOrderState[index] = this.userOrderState[target];
+                this.userOrderState[target] = temp;
+                this.renderOrderItems(document.getElementById('sortable-list'));
+            }
+
+            renderDecisionChallenge(container, station) {
+                const box = document.createElement('div');
+                box.className = "space-y-3";
+                station.options.forEach((opt, idx) => {
+                    box.innerHTML += `
+                        <label class="flex items-start gap-3 p-3.5 bg-white/80 rounded-xl border border-amber-300 cursor-pointer hover:bg-amber-50 transition">
+                            <input type="radio" name="st3-decision" value="${idx}" class="mt-1 accent-amber-800 w-4 h-4">
+                            <span class="text-xs md:text-sm text-amber-950 leading-relaxed">${opt.text}</span>
+                        </label>
+                    `;
+                });
+                container.appendChild(box);
+            }
+
+            renderMatchChallenge(container, station) {
+                const box = document.createElement('div');
+                box.className = "space-y-3";
+                station.pairs.forEach((pair, idx) => {
+                    const events = station.pairs.map(p => p.event).sort();
+                    let opts = `<option value="">-- Seleccionar Propósito Histórico --</option>`;
+                    events.forEach(e => {
+                        opts += `<option value="${e}">${e}</option>`;
+                    });
+
+                    box.innerHTML += `
+                        <div class="p-3 bg-white/80 border border-amber-300 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                            <span class="font-header font-bold text-xs md:text-sm text-amber-950 min-w-[180px]">${pair.leader}:</span>
+                            <select id="match-select-${idx}" class="w-full md:w-auto flex-1 p-2 bg-amber-50 border border-amber-400 rounded-lg text-xs text-amber-950 font-medium">
+                                ${opts}
+                            </select>
+                        </div>
+                    `;
+                });
+                container.appendChild(box);
+            }
+
+            renderQuizChallenge(container, station) {
+                const box = document.createElement('div');
+                box.className = "space-y-3";
+                box.innerHTML = `<p class="text-xs md:text-sm font-bold text-amber-950 mb-2">${station.question}</p>`;
+                station.answers.forEach((ans, idx) => {
+                    box.innerHTML += `
+                        <label class="flex items-center gap-3 p-3 bg-white/80 rounded-xl border border-amber-300 cursor-pointer hover:bg-amber-50 transition">
+                            <input type="radio" name="st5-radio" value="${idx}" class="accent-amber-800 w-4 h-4">
+                            <span class="text-xs md:text-sm text-amber-950">${ans}</span>
+                        </label>
+                    `;
+                });
+                container.appendChild(box);
+            }
+
+            // Main Verification Engine
+            verifyCurrentStation() {
+                const station = STATIONS_DATA.find(s => s.id === this.currentStationId);
+                let isCorrect = false;
+                let feedbackText = "";
+
+                if (station.type === 'caesar') {
+                    if (this.selectedCaesarOption === station.targetWord) {
+                        isCorrect = true;
+                        feedbackText = "¡Descifrado exitoso! Al aplicar el desplazamiento, la palabra clave resultante es SOBERANÍA, pilar fundamental de las Juntas de 1808.";
+                    } else {
+                        isCorrect = false;
+                        feedbackText = "Palabra incorrecta. Revisa el desplazamiento de letras en el alfabeto para encontrar la palabra adecuada.";
+                    }
+
+                } else if (station.type === 'order') {
+                    const currentIds = this.userOrderState.map(i => i.id);
+                    isCorrect = JSON.stringify(currentIds) === JSON.stringify(station.correctOrder);
+                    feedbackText = isCorrect 
+                        ? "¡Secuencia histórica exacta! Desde el Grito de Dolores (1810) hasta el Plan de Iguala (1821)." 
+                        : "Orden incorrecto. Recuerda que el Grito de Dolores ocurrió primero en 1810, seguido por los Sentimientos de la Nación de Morelos.";
+
+                } else if (station.type === 'decision') {
+                    const selected = document.querySelector('input[name="st3-decision"]:checked');
+                    if (selected) {
+                        const optIdx = parseInt(selected.value);
+                        const chosenOpt = station.options[optIdx];
+                        isCorrect = chosenOpt.correct;
+                        feedbackText = chosenOpt.explanation;
+                    } else {
+                        isCorrect = false;
+                        feedbackText = "Por favor selecciona una estrategia antes de verificar.";
+                    }
+
+                } else if (station.type === 'match') {
+                    let allMatched = true;
+                    station.pairs.forEach((pair, idx) => {
+                        const val = document.getElementById(`match-select-${idx}`).value;
+                        if (val !== pair.event) allMatched = false;
+                    });
+                    isCorrect = allMatched;
+                    feedbackText = isCorrect 
+                        ? "¡Asociación perfecta! Has conectado correctamente las cartas y discursos de Simón Bolívar con sus hitos." 
+                        : "Revisa las selecciones. Recuerda que la Carta de Jamaica (1815) trataba el futuro de América y Boyacá la toma de la Nueva Granada.";
+
+                } else if (station.type === 'quiz') {
+                    const selected = document.querySelector('input[name="st5-radio"]:checked');
+                    if (selected && parseInt(selected.value) === station.correctIndex) {
+                        isCorrect = true;
+                        feedbackText = "¡Correcto! La capitulación de Ayacucho provocó el retiro formal de las tropas españolas del continente sudamericano.";
+                    } else {
+                        isCorrect = false;
+                        feedbackText = "Respuesta incorrecta. Recuerda el impacto definitivo de la victoria militar del Mariscal Sucre en Ayacucho.";
+                    }
+                }
+
+                this.showFeedback(isCorrect, feedbackText);
+
+                if (isCorrect) {
+                    sound.playSuccess();
+                    this.completedStations.add(this.currentStationId);
+                    
+                    if (this.currentStationId < 5) {
+                        this.unlockedStations.add(this.currentStationId + 1);
+                    }
+
+                    this.renderMapState();
+                    this.renderClues();
+                    this.renderLogros();
+
+                    if (this.completedStations.size === 5) {
+                        setTimeout(() => {
+                            this.closeStationModal();
+                            sound.playVictoryFanfare();
+                            this.showVictoryModal();
+                        }, 1800);
+                    }
+                } else {
+                    sound.playError();
+                }
+            }
+
+            showFeedback(isCorrect, text) {
+                const fb = document.getElementById('modal-feedback');
+                fb.classList.remove('hidden', 'bg-green-900/20', 'border-green-600', 'text-green-950', 'bg-red-900/20', 'border-red-600', 'text-red-950');
+                
+                if (isCorrect) {
+                    fb.classList.add('bg-green-900/20', 'border', 'border-green-600', 'text-green-950');
+                    fb.innerHTML = `
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-700 flex-shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold block mb-0.5">¡Pista Desbloqueada!</span>
+                            <p>${text}</p>
+                        </div>
+                    `;
+                } else {
+                    fb.classList.add('bg-red-900/20', 'border', 'border-red-600', 'text-red-950');
+                    fb.innerHTML = `
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-700 flex-shrink-0 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold block mb-0.5">Enigma No Resuelto</span>
+                            <p>${text}</p>
+                        </div>
+                    `;
+                }
+                lucide.createIcons();
+            }
+
+            renderClues() {
+                const container = document.getElementById('clues-container');
+                container.innerHTML = "";
+
+                if (this.completedStations.size === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full bg-amber-950/5 border border-dashed border-amber-800/30 p-4 rounded-xl flex items-center justify-center text-xs text-amber-800/60 italic text-center min-h-[80px]">
+                            Supera la Estación 1 para registrar tu primera pista histórica en el diario de expedición...
+                        </div>
+                    `;
+                    return;
+                }
+
+                STATIONS_DATA.forEach(st => {
+                    if (this.completedStations.has(st.id)) {
+                        const card = document.createElement('div');
+                        card.className = "bg-amber-100/90 border border-amber-400 p-4 rounded-xl shadow-sm space-y-2 relative overflow-hidden";
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between border-b border-amber-300 pb-1.5">
+                                <span class="font-header font-bold text-xs text-patriotRed uppercase tracking-wider">Hallazgo Histórico #${st.id}</span>
+                                <i data-lucide="bookmark" class="w-4 h-4 text-patriotGold"></i>
+                            </div>
+                            <p class="text-xs text-amber-950 leading-relaxed font-semibold">${st.clue}</p>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+                lucide.createIcons();
+            }
+
+            renderLogros() {
+                const list = document.getElementById('logros-list');
+                list.innerHTML = "";
+
+                STATIONS_DATA.forEach(st => {
+                    const isUnlocked = this.completedStations.has(st.id);
+                    const div = document.createElement('div');
+                    div.className = `p-3.5 rounded-xl border flex items-center gap-3 transition ${
+                        isUnlocked 
+                        ? 'bg-amber-100 border-patriotGold text-amber-950 shadow' 
+                        : 'bg-amber-950/10 border-amber-900/20 text-amber-900/50 opacity-60'
+                    }`;
+                    div.innerHTML = `
+                        <div class="w-10 h-10 rounded-full ${isUnlocked ? 'bg-patriotGold text-amber-950' : 'bg-amber-800/30 text-amber-900'} flex items-center justify-center font-bold flex-shrink-0">
+                            <i data-lucide="${isUnlocked ? 'award' : 'lock'}" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-header font-bold text-xs ${isUnlocked ? 'text-amber-950' : 'text-amber-900/70'}">${st.medal}</h4>
+                            <p class="text-[11px]">${isUnlocked ? st.medalDesc : 'Supera la estación para ganar esta condecoración.'}</p>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+                lucide.createIcons();
+            }
+
+            toggleLogrosModal() {
+                sound.playClick();
+                document.getElementById('logros-modal').classList.toggle('hidden');
+            }
+
+            showVictoryModal() {
+                document.getElementById('victory-modal').classList.remove('hidden');
+                lucide.createIcons();
+            }
+        }
+
+        let app;
+        window.addEventListener('DOMContentLoaded', () => {
+            app = new IndependenceApp();
+            app.init();
+        });
+    </script>
+</body>
+</html>
